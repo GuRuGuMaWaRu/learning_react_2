@@ -1,7 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-
 const counter = (state = 0, action) => {
   switch (action.type) {
     case 'INCREMENT':
@@ -13,17 +9,16 @@ const counter = (state = 0, action) => {
   }
 }
 
-const Counter = ({ value }) => (
-  <h1>{value}</h1>
-);
-
+const { createStore } = Redux;
 const store = createStore(counter);
 
+console.log(store.getState()); // 0
+
+store.dispatch({ type: 'INCREMENT' });
+console.log(store.getState()); // 1
+
 const render = () => {
-  ReactDOM.render(
-    <Counter value={store.getState()} />,
-    document.getElementById('root')
-  );
+  document.body.innerText = store.getState();
 };
 
 store.subscribe(render); // subscribe to any state changes
