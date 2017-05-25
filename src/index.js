@@ -13,22 +13,38 @@ const counter = (state = 0, action) => {
   }
 }
 
-const Counter = ({ value }) => (
-  <h1>{value}</h1>
+const Counter = ({
+  value,
+  onIncrement,
+  onDecrement
+ }) => (
+  <div>
+    <h1>{value}</h1>
+    <button onClick={onIncrement}>+</button>
+    <button onClick={onDecrement}>-</button>
+  </div>
 );
 
 const store = createStore(counter);
 
 const render = () => {
   ReactDOM.render(
-    <Counter value={store.getState()} />,
+    <Counter
+      value={store.getState()}
+      onIncrement={() =>
+        store.dispatch({
+          type: 'INCREMENT'
+        })
+      }
+      onDecrement={() =>
+        store.dispatch({
+          type: 'DECREMENT'
+        })
+      }
+    />,
     document.getElementById('root')
   );
 };
 
 store.subscribe(render); // subscribe to any state changes
 render(); // render initial state
-
-document.addEventListener('click', () => {
-  store.dispatch({ type: 'INCREMENT' }); // 2
-});
