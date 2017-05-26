@@ -139,7 +139,7 @@ class TodoApp extends Component {
             store.dispatch({
               type: 'TOGGLE_TODO',
               id
-            })
+            });
           }
         />
         <p>
