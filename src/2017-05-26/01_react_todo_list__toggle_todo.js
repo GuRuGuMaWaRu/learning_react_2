@@ -1,8 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createStore, combineReducers } from 'redux';
-
-
 const todo = (state, action) => {
   switch (action.type) {
     case 'ADD_TODO':
@@ -48,11 +43,13 @@ const visibilityFilter = (state = 'SHOW_ALL', action) => {
   }
 };
 
+const { combineReducers } = Redux;
 const todoApp = combineReducers({
   todos,
   visibilityFilter
 });
 
+const { createStore } = Redux;
 const store = createStore(todoApp);
 
 const { Component } = React;
