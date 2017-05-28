@@ -4,7 +4,6 @@ import { PropTypes } from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 import { v4 } from 'node-uuid'; // generate random id
-import throttle from 'lodash/throttle';
 
 const todo = (state, action) => {
   switch (action.type) {
@@ -227,11 +226,11 @@ const saveState = (state) => {
 const persistedState = loadState();
 const store = createStore(todoApp, persistedState);
 
-store.subscribe(throttle(() => {
+store.subscribe(() => {
   saveState({
     todos: store.getState().todos
   });
-}, 1000));
+});
 
 ReactDOM.render(
   <Provider store={store}>
