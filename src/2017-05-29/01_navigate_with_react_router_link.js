@@ -4,11 +4,7 @@ import { PropTypes } from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 // import { Router, Route } from 'react-router';
-import {
-  BrowserRouter as Router,
-  Route,
-  NavLink,
-  Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { v4 } from 'node-uuid'; // generate random id
 import throttle from 'lodash/throttle';
 
@@ -78,17 +74,17 @@ const toggleTodo = (id) => ({
 /* components -- FilterLink.js
 =====================================*/
 
-const FilterLink = ({ filter, children }) => (
-  <NavLink
-    to={'/' + filter}
+const FilterLink = ({ filter, children }) => {
+  <Link
+    to={filter === 'all' ? '' : filter}
     activeStyle={{
       textDecoration: 'none',
       color: 'black',
     }}
   >
     {children}
-  </NavLink>
-);
+  </Link>
+};
 
 /* components -- Footer.js
 =====================================*/
@@ -193,7 +189,7 @@ const App = () => (
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
-      <Route path='/:filter' component={App} />
+      <Route path='/(:filter)' component={App} />
     </Router>
   </Provider>
 );

@@ -76,7 +76,7 @@ const setVisibilityFilter = (filter) => ({
   filter
 });
 
-/*
+/* components -- Link.js
 =====================================*/
 
 const Link = ({ active, onClick, children }) => {
@@ -94,6 +94,9 @@ const Link = ({ active, onClick, children }) => {
   );
 };
 
+/* components -- FilterLink.js
+=====================================*/
+
 const mapStateToLinkProps = (state, ownProps) => ({
   active: ownProps.filter === state.visibilityFilter
 });
@@ -106,6 +109,9 @@ const FilterLink = connect(
   mapStateToLinkProps,
   mapDispatchToLinkProps
 )(Link);
+
+/* components -- Footer.js
+=====================================*/
 
 const Footer = () => (
   <p>
