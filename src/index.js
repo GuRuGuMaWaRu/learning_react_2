@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { render } from 'react-dom';
 // import { PropTypes } from 'prop-types';
 import { Provider, connect } from 'react-redux';
@@ -224,14 +224,38 @@ AddTodo = connect()(AddTodo)
 // import { getVisibleTodos } from '../reducers';
 // import TodoList from './TodoList';
 
-const mapStateToTodoListProps = (state, ownProps) => ({
-  todos: getVisibleTodos(state, ownProps.match.params.filter || 'all')
-});
+class VisibleTodoList extends Component {
+  componentDidMount() {
+    fetchTodos(this.props.filter).then(todos =>
+      console.log(this.props.filter, todos)
+    );
+  }
 
-const VisibleTodoList = withRouter(connect(
+  componentDidUpdate(prevProps) {
+    if (this.props.filter !== prevProps.filter) {
+      fetchTodos(this.props.filter).then(todos =>
+        console.log(this.props.filter, todos)
+      );
+    }
+  }
+
+  render() {
+    return <TodoList {...this.props} />;
+  }
+}
+
+const mapStateToTodoListProps = (state, ownProps) => {
+  const filter = ownProps.match.params.filter || 'all';
+  return {
+    todos: getVisibleTodos(state, filter),
+    filter,
+  }
+};
+
+VisibleTodoList = withRouter(connect(
   mapStateToTodoListProps,
   { onTodoClick: toggleTodo }
-)(TodoList));
+)(VisibleTodoList));
 
 /* components -- App.js
 =====================================*/
@@ -288,10 +312,6 @@ const configureStore = () => {
 
 /* src -- index.js
 =====================================*/
-
-fetchTodos('all').then(todos =>
-  console.log(todos)
-);
 
 const store = configureStore();
 render(
