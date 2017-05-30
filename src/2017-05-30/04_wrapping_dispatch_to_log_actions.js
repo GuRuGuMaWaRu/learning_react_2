@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import { PropTypes } from 'prop-types';
 import { Provider, connect } from 'react-redux';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { withRouter } from 'react-router';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import { v4 } from 'node-uuid'; // generate random id
@@ -259,6 +259,7 @@ const addLoggingToDispatch = (store) => {
     const returnValue = rawDispatch(action);
     console.log('%c next state', 'color: green', store.getState());
     console.groupEnd(action.type);
+    return returnValue;
   };
 };
 
@@ -269,6 +270,10 @@ const configureStore = () => {
   if (process.env.NODE_ENV !== 'production') {
     store.dispatch = addLoggingToDispatch(store);
   }
+
+  // store.subscribe = addLoggingToDispatch(store);
+
+  // const createStoreWithMiddleware = applyMiddleware(addLoggingToDispatch)();
 
   store.subscribe(throttle(() => {
     saveState({
