@@ -133,7 +133,8 @@ AddTodo = connect()(AddTodo)
 /* components -- VisibleTodoList.js
 =====================================*/
 
-const getVisibleTodos = (todos, filter) => {
+const getVisibleTodos = (todos, filter, ownProps) => {
+  console.log(ownProps);
   switch (filter) {
     case 'all':
       return todos;
@@ -144,8 +145,8 @@ const getVisibleTodos = (todos, filter) => {
   };
 };
 
-const mapStateToTodoListProps = (state, { match }) => ({
-  todos: getVisibleTodos(state.todos, match.filter || 'all')
+const mapStateToTodoListProps = (state, ownProps) => ({
+  todos: getVisibleTodos(state.todos, ownProps.match.params.filter || 'all', ownProps)
 });
 const mapDispatchToTodoListProps = (dispatch) => ({
   onTodoClick (id) {
