@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { render } from 'react-dom';
 // import { PropTypes } from 'prop-types';
 import { Provider, connect } from 'react-redux';
@@ -314,6 +315,7 @@ const configureStore = () => {
     todoApp,
     applyMiddleware(...middlewares)
   );
+
 };
 
 /* src -- index.js
