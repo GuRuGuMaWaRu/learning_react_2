@@ -75,7 +75,7 @@ const todoApp = combineReducers({
 
 export const getVisibleTodos = (state, filter) => {
   // fromTodos.getVisibleTodos(state.todos, filter);
-  getVisibleTodosInner(state.todos, filter);
+  return getVisibleTodosInner(state.todos, filter);
 };
 
 /* src/actions -- index.js
@@ -170,7 +170,7 @@ AddTodo = connect()(AddTodo)
 // import TodoList from './TodoList';
 
 const mapStateToTodoListProps = (state, ownProps) => ({
-  todos: getVisibleTodos(state, ownProps.match.params.filter || 'all', ownProps)
+  todos: getVisibleTodos(state, ownProps.match.params.filter || 'all')
 });
 
 const VisibleTodoList = withRouter(connect(
