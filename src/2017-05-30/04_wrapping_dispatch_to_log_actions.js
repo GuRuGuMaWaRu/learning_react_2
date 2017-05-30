@@ -259,7 +259,6 @@ const addLoggingToDispatch = (store) => {
     const returnValue = rawDispatch(action);
     console.log('%c next state', 'color: green', store.getState());
     console.groupEnd(action.type);
-    return returnValue;
   };
 };
 
@@ -270,8 +269,6 @@ const configureStore = () => {
   if (process.env.NODE_ENV !== 'production') {
     store.dispatch = addLoggingToDispatch(store);
   }
-
-  // store.subscribe = addLoggingToDispatch(store);
 
   store.subscribe(throttle(() => {
     saveState({
