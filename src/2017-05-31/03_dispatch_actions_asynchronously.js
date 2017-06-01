@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+// import { PropTypes } from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { withRouter } from 'react-router';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import { v4 } from 'node-uuid'; // generate random id
+
+import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
-import thunk from 'redux-thunk';
 
 /* ... -- index.js
 =====================================*/
@@ -31,7 +33,7 @@ const delay = (ms) =>
   new Promise(resolve => setTimeout(resolve, ms));
 
 export const fetchTodosApi = (filter) =>
-  delay(5000).then(() => {
+  delay(500).then(() => {
     switch (filter) {
       case 'all':
         return fakeDatabase.todos;
@@ -126,7 +128,7 @@ export const getIsFetching = (state, filter) =>
 /* src/actions -- index.js
 =====================================*/
 
-const requestTodos = (filter) => ({
+export const requestTodos = (filter) => ({
   type: 'REQUEST_TODOS',
   filter,
 });
@@ -137,17 +139,10 @@ const receiveTodos = (filter, response) => ({
   response,
 });
 
-export const fetchTodos = (filter) => (dispatch, getState) => {
-  if (getIsFetching(getState(), filter)) {
-    return Promise.resolve();
-  }
-
-  dispatch(requestTodos(filter));
-
-  return fetchTodosApi(filter).then(response => {
-    dispatch(receiveTodos(filter, response));
-  });
-};
+export const fetchTodos = (filter) =>
+  fetchTodosApi(filter).then(response =>
+    receiveTodos(filter, response)
+  );
 
 export const addTodo = (text) => ({
   type: 'ADD_TODO',
@@ -190,7 +185,7 @@ const Footer = () => (
   </p>
 );
 
-/* components -- Todo.js
+/*
 =====================================*/
 
 const Todo = ({ onClick, completed, text }) => (
@@ -200,9 +195,6 @@ const Todo = ({ onClick, completed, text }) => (
     {text}
   </li>
 );
-
-/* components -- TodoList.js
-=====================================*/
 
 const TodoList = ({ todos, onTodoClick }) => (
   <ul>
@@ -215,9 +207,6 @@ const TodoList = ({ todos, onTodoClick }) => (
     )}
   </ul>
 );
-
-/* components -- AddTodo.js
-=====================================*/
 
 let AddTodo = ({ dispatch }) => {
   let input;
@@ -250,8 +239,9 @@ class VisibleTodoList extends Component {
   }
 
   fetchData() {
-    const { filter, fetchTodos } = this.props;
-    fetchTodos(filter).then(() => console.log('done!'));
+    const { filter, requestTodos, fetchTodos } = this.props;
+    requestTodos(filter);
+    fetchTodos(filter);
   }
 
   render() {
@@ -308,7 +298,7 @@ const Root = ({ store }) => (
 =====================================*/
 
 const configureStore = () => {
-  const middlewares = [thunk];
+  const middlewares = [promise];
 
   if (process.env.NODE_ENV !== 'production') {
     middlewares.push(createLogger());
