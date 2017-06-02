@@ -221,6 +221,7 @@ export const fetchTodos = (filter) => (dispatch, getState) => {
 
 export const addTodo = (text) => (dispatch) =>
   addTodoApi(text).then(response => {
+    // console.log(normalize(response, todoSchema));
     dispatch({
       type: 'ADD_TODO_SUCCESS',
       response: normalize(response, todoSchema),
@@ -229,6 +230,7 @@ export const addTodo = (text) => (dispatch) =>
 
 export const toggleTodo = (id) => (dispatch) =>
   toggleTodoApi(id).then(response => {
+    console.log(normalize(response, todoSchema));
     dispatch({
       type: 'TOGGLE_TODO_SUCCESS',
       response: normalize(response, todoSchema)
@@ -380,7 +382,7 @@ VisibleTodoList = withRouter(connect(
 /* components -- App.js
 =====================================*/
 
-const App = ({ match }) => (
+const App = () => (
   <div>
     <AddTodo />
     <VisibleTodoList />
@@ -390,6 +392,7 @@ const App = ({ match }) => (
 
 /* components -- Root.js
 =====================================*/
+
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
